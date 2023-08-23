@@ -4,22 +4,19 @@ class FlatIterator:
         self.list_of_list = list_of_list
 
     def __iter__(self):
-        self.nested_list_counter = 0
-        self.main_list_counter = 0
-        self.list = []
-        self.item =[]
+        self.outer_list_cursor = 0 # внешний
+        self.inner_list_cursor = -1 # внутренний
         return self
 
     def __next__(self):
-        if self.nested_list_counter < len(self.list_of_list[self.main_list_counter]):
-            self.list.append(self.list_of_list[self.main_list_counter][self.nested_list_counter])
-            self.nested_list_counter += 1
-        else:
-            self.main_list_counter += 1
-            self.nested_list_counter = 0
-            if self.main_list_counter == len(self.list_of_list):
-                raise StopIteration
-        return self.list
+        self.inner_list_cursor += 1
+        if self.inner_list_cursor >= len(self.list_of_list[self.outer_list_cursor]):
+            self.inner_list_cursor = 0
+            self.outer_list_cursor += 1
+        if self.outer_list_cursor >= len(self.list_of_list):
+            raise StopIteration
+        return self.list_of_list[self.outer_list_cursor][self.inner_list_cursor]
+
 
 
 def test_1():
